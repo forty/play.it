@@ -100,3 +100,41 @@ move_icons_to() {
 	)
 }
 
+# write post-installation and pre-removal scripts for icons linking
+# USAGE: postinst_icons_linking $app[…]
+# NEEDED VARS: APP_ICONS_LIST APP_ID|GAME_ID APP_ICON APP_ICON_RES PATH_GAME
+postinst_icons_linking() {
+	for app in "$@"; do
+		# get icons list associated with current application
+		local app_icons_list="$(eval printf -- '%b' \"\$${1}_ICONS_LIST\")"
+
+		# get current application id (falls back on $GAME_ID if it is not set)
+		local app_id
+		if [ -n "$(eval printf -- '%b' \"\$${1}_ID\")" ]; then
+			app_id="$(eval printf -- '%b' \"\$${1}_ID\")"
+		else
+			app_id="$GAME_ID"
+		fi
+
+		for icon in $app_icons_list; do
+			local icon_file="$(eval printf -- '%b' \"\$$icon\")"
+			local icon_res="$(eval printf -- '%b' \"\$${icon}_RES\")"
+			PATH_ICON="$PATH_ICON_BASE/${icon_res}x${icon_res}/apps"
+
+			cat > "$postinst" <<- EOF
+			if [ ! -e "$PATH_ICON/$app_id.png" ]; then
+			  mkdir --parents "$PATH_ICON"
+			  ln --symbolic "$PATH_GAME"/$icon_file "$PATH_ICON/$app_id.png"
+			fi
+			EOF
+
+			cat > "$prerm" <<- EOF
+			if [ -e "$PATH_ICON/$app_id.png" ]; then
+			  rm "$PATH_ICON/$app_id.png"
+			  rmdir --parents --ignore-fail-on-non-empty "$PATH_ICON"
+			fi
+			EOF
+		done
+	done
+}
+
