@@ -48,14 +48,14 @@ ARCHIVE_GOG_MD5='a258086331e913f8cf8110983da234d1'
 ARCHIVE_GOG_SIZE='120000'
 ARCHIVE_GOG_VERSION='1.0.3-gog2.1.0.2'
 
-ARCHIVE_DOC_PATH='data/noarch/docs'
-ARCHIVE_DOC_FILES='./*'
+ARCHIVE_DOC1_PATH='data/noarch/docs'
+ARCHIVE_DOC1_FILES='./*'
 
-ARCHIVE_DOC_PATH='data/noarch/support'
-ARCHIVE_DOC_FILES='./*.txt'
+ARCHIVE_DOC2_PATH='data/noarch/support'
+ARCHIVE_DOC2_FILES='./*.txt'
 
 ARCHIVE_GAME_BIN_PATH='data/noarch/game'
-ARCHIVE_GAME_BIN_FILES='./PAN-PAN.x86_64 ./*_Data/*/x86'
+ARCHIVE_GAME_BIN_FILES='./PAN-PAN.x86_64 ./*_Data/*/x86_64'
 
 ARCHIVE_GAME_DATA_PATH='data/noarch/game'
 ARCHIVE_GAME_DATA_FILES='./*_Data'
@@ -101,9 +101,11 @@ extract_data_from "$SOURCE_ARCHIVE"
 set_standard_permissions "$PLAYIT_WORKDIR/gamedata"
 
 PKG='PKG_BIN'
-organize_data 'GAME_BIN' "$PATH_GAME"
+organize_data 'GAME_BIN'  "$PATH_GAME"
 
 PKG='PKG_DATA'
+organize_data 'DOC1'      "$PATH_DOC"
+organize_data 'DOC2'      "$PATH_DOC"
 organize_data 'GAME_DATA' "$PATH_GAME"
 
 rm --recursive "$PLAYIT_WORKDIR/gamedata"
