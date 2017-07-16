@@ -34,7 +34,7 @@ set -o errexit
 # send your bug reports to vv221@dotslashplay.it
 ###
 
-script_version=20170716.1
+script_version=20170716.2
 
 # Set game-specific variables
 
@@ -68,6 +68,7 @@ APP_MAIN_EXE_BIN32='julia'
 APP_MAIN_EXE_BIN64='julia64'
 APP_MAIN_LIBS_BIN32='./lib'
 APP_MAIN_LIBS_BIN64='./lib64'
+APP_MAIN_OPTIONS='-ignore _sd'
 APP_MAIN_ICON='data/noarch/support/icon.png'
 APP_MAIN_ICON_RES='256'
 
