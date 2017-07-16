@@ -34,7 +34,7 @@ set -o errexit
 # send your bug reports to vv221@dotslashplay.it
 ###
 
-script_version=20170715.2
+script_version=20170716.1
 
 # Set game-specific variables
 
@@ -77,7 +77,7 @@ PKG_DATA_ID="${GAME_ID}-data"
 PKG_DATA_DESCRIPTION='data'
 
 PKG_BIN32_ARCH='32'
-PKG_BIN32_DEPS_DEB="$PKG_DATA_ID, libc6, libharfbuzz0b, libpcre3, libbz2-1.0, libfreetype6, libsdl2, libasound-plugins, libpulse0"
+PKG_BIN32_DEPS_DEB="$PKG_DATA_ID, libc6, libharfbuzz0b, libpcre3, libbz2-1.0, libfreetype6, libsdl2-2.0-0, libasound2-plugins, libpulse0"
 PKG_BIN32_DEPS_ARCH="$PKG_DATA_ID lib32-glibc lib32-pcre lib32-harfbuzz lib32-bzip2 lib32-gcc-libs lib32-freetype2 lib32-sld2 lib32-alsa-plugins lib32-libpulse"
 
 PKG_BIN64_ARCH='64'
