@@ -22,11 +22,14 @@ write_bin_winecfg() {
 # CALLED BY: write_bin
 write_bin_set_wine() {
 	cat >> "$file" <<- 'EOF'
-	WINEPREFIX="$XDG_DATA_HOME/play.it/prefixes/$PREFIX_ID"
+	export WINEARCH='win32'
+	export WINEDEBUG='-all'
+	export WINEDLLOVERRIDES='winemenubuilder.exe,mscoree,mshtml=d'
+	export WINEPREFIX="$XDG_DATA_HOME/play.it/prefixes/$PREFIX_ID"
+	# Work around WINE bug 41639
+	export FREETYPE_PROPERTIES="truetype:interpreter-version=35"
+
 	PATH_PREFIX="$WINEPREFIX/drive_c/$GAME_ID"
-	WINEARCH='win32'
-	WINEDEBUG='-all'
-	WINEDLLOVERRIDES='winemenubuilder.exe,mscoree,mshtml=d'
 
 	EOF
 }
@@ -37,7 +40,6 @@ write_bin_set_wine() {
 # CALLED BY: write_bin
 write_bin_build_wine() {
 	cat >> "$file" <<- 'EOF'
-	export WINEPREFIX WINEARCH WINEDEBUG WINEDLLOVERRIDES
 	if ! [ -e "$WINEPREFIX" ]; then
 	  mkdir --parents "${WINEPREFIX%/*}"
 	  wineboot --init 2>/dev/null
