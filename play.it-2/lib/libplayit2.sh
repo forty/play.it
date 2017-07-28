@@ -1025,14 +1025,15 @@ case $OPTION_PACKAGE in
 	;;
 esac
 
-# Set source archive
+if [ -z "$LIB_ONLY" ]; then
+	# Set source archive
 
-set_source_archive $ARCHIVES_LIST
+	set_source_archive $ARCHIVES_LIST
 
-# Set working directories
+	# Set working directories
 
-set_temp_directories $PACKAGES_LIST
-
+	set_temp_directories $PACKAGES_LIST
+fi
 
 # extract data from given archive
 # USAGE: extract_data_from $archive[…]

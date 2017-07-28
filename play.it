@@ -1,0 +1,53 @@
+#!/bin/sh -e
+
+set -o errexit
+
+INPUT_FILE="$1"
+
+target_version='2.0'
+LIB_ONLY=true
+SCRIPT_DEPS='md5sum'
+
+if [ -z "$PLAYIT_LIB2" ]; then
+	[ -n "$XDG_DATA_HOME" ] || XDG_DATA_HOME="$HOME/.local/share"
+	if [ -e "$XDG_DATA_HOME/play.it/libplayit2.sh" ]; then
+		PLAYIT_LIB2="$XDG_DATA_HOME/play.it/libplayit2.sh"
+	elif [ -e './libplayit2.sh' ]; then
+		PLAYIT_LIB2='./libplayit2.sh'
+	elif [ -e './play.it-2/lib/libplayit2.sh' ]; then
+		PLAYIT_LIB2='./play.it-2/lib/libplayit2.sh'
+	else
+		printf '\n\033[1;31mError:\033[0m\n'
+		printf 'libplayit2.sh not found.\n'
+		return 1
+	fi
+fi
+. "$PLAYIT_LIB2"
+
+
+if [ ! -f "$INPUT_FILE" ]; then
+	print_error
+	printf "$INPUT_FILE is not a valid file\n"
+	return 1
+fi
+
+FILE_MD5="$(md5sum $INPUT_FILE | cut -d' ' -f1)"
+SCRIPT="$(grep -Rl "$FILE_MD5" ./play.it-1 ./play.it-2 | sort -r | head -1)"
+
+if [ -z "$SCRIPT" ]; then
+	print_error
+	printf "Could not find script for hash $FILE_MD5\n"
+	return 1
+fi
+
+PLAYIT_VERSION="$(echo $SCRIPT | cut -d'/' -f2)"
+echo $PLAY_VERSION
+
+case "$PLAYIT_VERSION" in
+	('play.it-1')
+		PLAYIT_LIB="./play.it-1/play-anything.sh" "$SCRIPT" "$INPUT_FILE"
+	;;
+	('play.it-2')
+		PLAYIT_LIB2="$PLAYIT_LIB2" "$SCRIPT" "$INPUT_FILE"
+	;;
+esac
